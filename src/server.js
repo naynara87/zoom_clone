@@ -13,7 +13,23 @@ app.get("/*", (_, res) => res.render("/"));
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
 
 const server = http.createServer(app);
-
 const wss = new webSocket.Server({ server });
 
-server.listen(3000, handleListen);
+
+function onSocketClose() {
+    console.log("Disconnected from the Browser X")
+}
+function onSocketMessage(message) {
+    console.log(message)
+}
+
+function handleConnection(socket) {
+    console.log("connected to Brower ok!");
+    socket.on("close", onSocketClose);
+    socket.on("message", onSocketMessage)
+    socket.send("hello");
+}
+
+wss.on("connection", handleConnection);
+
+server.listen(3000, handleListen); 
