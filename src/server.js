@@ -19,14 +19,18 @@ const wss = new webSocket.Server({ server });
 function onSocketClose() {
     console.log("Disconnected from the Browser X")
 }
-function onSocketMessage(message) {
-    console.log(message)
-}
+
+const sockets = [];
 
 function handleConnection(socket) {
+    sockets.push(socket);
     console.log("connected to Brower ok!");
     socket.on("close", onSocketClose);
-    socket.on("message", onSocketMessage)
+    socket.on("message", (message) => {
+        sockets.forEach(aSocket => aSocket.send(message.toString()))
+        // socket.send(message.toString('ascii'));
+        // console.log(message.toString('ascii'));
+    });
     socket.send("hello");
 }
 

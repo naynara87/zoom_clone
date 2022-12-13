@@ -10,7 +10,7 @@ function handleOpen() {
 socket.addEventListener("open", handleOpen);
 
 socket.addEventListener("message", (message) => {
-    console.log("New message:", message.data, "from the server")
+    console.log("New message:", message.data)
 });
 
 socket.addEventListener("close", () => {
@@ -20,3 +20,11 @@ socket.addEventListener("close", () => {
 setTimeout(() => {
     socket.send("hello from thd browser")
 }, 10000);
+
+function handleSubmit(event) {
+    event.preventDefault();
+    const input = messageForm.querySelector("input");
+    socket.send(input.value);
+    input.value = ""
+}
+messageForm.addEventListener("submit", handleSubmit)
